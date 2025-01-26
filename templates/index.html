@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Wallet Balance Checker</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom CSS for animations and gradients -->
+    <style>
+        /* Deep dark gradient background with wave animation */
+        body {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a1a, #2a2a2a);
+            background-size: 200% 200%;
+            animation: gradientAnimation 10s ease infinite;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Wave animation */
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 70%);
+            animation: waveAnimation 10s linear infinite;
+        }
+        @keyframes waveAnimation {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Glassmorphism effect with glowing border */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card hover effect */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Glow effect for the button */
+        .glow-button {
+            transition: box-shadow 0.3s ease;
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.9);
+        }
+
+        /* Full-screen layout */
+        .full-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive grid for wallet details */
+        .wallet-details {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+            width: 100%;
+        }
+        @media (min-width: 640px) {
+            .wallet-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Neon border effect for wallet details */
+        .neon-border {
+            position: relative;
+            overflow: hidden;
+        }
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid transparent;
+            border-radius: 0.5rem;
+            animation: neonGlow 2s linear infinite;
+        }
+        @keyframes neonGlow {
+            0% { border-color: rgba(59, 130, 246, 0.5); }
+            50% { border-color: rgba(59, 130, 246, 1); }
+            100% { border-color: rgba(59, 130, 246, 0.5); }
+        }
+    </style>
+</head>
+<body class="text-gray-100">
+    <!-- Wave animation container -->
+    <div class="wave-container">
+        <div class="wave"></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="full-screen">
+        <div class="glassmorphism p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-4xl card-hover">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold text-white mb-2">Solana Wallet</h1>
+                <p class="text-gray-300">Check your wallet balance in real-time</p>
+            </div>
+
+            <!-- Form -->
+            <form method="POST" action="/" class="space-y-6">
+                <div>
+                    <label for="wallet_address" class="block text-sm font-medium text-gray-300 mb-2">Wallet Address</label>
+                    <input
+                        type="text"
+                        id="wallet_address"
+                        name="wallet_address"
+                        placeholder="Enter Solana Wallet Address"
+                        class="w-full px-4 py-3 bg-gray-800/50 border border-gray-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white placeholder-gray-400"
+                        required
+                    >
+                </div>
+                <button
+                    type="submit"
+                    class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg glow-button hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200"
+                >
+                    Check Balance
+                </button>
+            </form>
+
+            <!-- Error Message -->
+            {% if error %}
+                <div class="mt-6 p-4 bg-red-900/50 border border-red-700/50 text-red-200 rounded-lg fade-in">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <!-- Wallet Details -->
+            {% if wallet_address %}
+                <div class="mt-8 space-y-4 fade-in">
+                    <h2 class="text-3xl font-bold text-white mb-6">Wallet Details</h2>
+                    <div class="wallet-details">
+                        <div class="glassmorphism p-4 rounded-lg neon-border">
+                            <span class="text-gray-300">Wallet Address:</span>
+                            <span class="text-white font-medium block mt-1">{{ wallet_address }}</span>
+                        </div>
+                        <div class="glassmorphism p-4 rounded-lg neon-border">
+                            <span class="text-gray-300">Balance (SOL):</span>
+                            <span class="text-white font-medium block mt-1">{{ balance_sol }}</span>
+                        </div>
+                        <div class="glassmorphism p-4 rounded-lg neon-border">
+                            <span class="text-gray-300">Balance (Lamports):</span>
+                            <span class="text-white font-medium block mt-1">{{ balance_lamports }}</span>
+                        </div>
+                        <div class="glassmorphism p-4 rounded-lg neon-border">
+                            <span class="text-gray-300">API Version:</span>
+                            <span class="text-white font-medium block mt-1">{{ api_version }}</span>
+                        </div>
+                        <div class="glassmorphism p-4 rounded-lg neon-border">
+                            <span class="text-gray-300">Slot:</span>
+                            <span class="text-white font-medium block mt-1">{{ slot }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
